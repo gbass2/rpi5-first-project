@@ -7,7 +7,11 @@ BOARD_NAME="$(basename ${BOARD_DIR})"
 GENIMAGE_CFG="${BOARD_DIR}/genimage-${BOARD_NAME}.cfg"
 GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
 
-cp "${BUILD_DIR}/linux-rpi-6.6.y/arch/arm64/boot/dts/broadcom/bcm2712-rpi-5-b.dtb" ${BINARIES_DIR}
+# copy the dts files to the output directory.
+#KERNEL_VERSION=$(grep -Is BR2_LINUX_KERNEL_VERSION ${BR2_CONFIG})
+KERNEL_VERSION=$(grep -oP 'BR2_LINUX_KERNEL_VERSION="\K[^"]+' ${BR2_CONFIG})
+
+cp "${BUILD_DIR}/linux-${KERNEL_VERSION}/arch/arm64/boot/dts/broadcom/bcm2712-rpi-5-b.dtb" ${BINARIES_DIR}
 
 # generate genimage from template if a board specific variant doesn't exists
 if [ ! -e "${GENIMAGE_CFG}" ]; then
